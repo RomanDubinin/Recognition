@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -10,14 +9,14 @@ namespace FindContours
 {
 	public partial class FrmContours : Form
 	{
-		private Capture capture;
-		private FindContours processor = new FindContours();
 		private ObjectFinder ObjectFinder;
+		private readonly Camera Camera1;
 
 		public FrmContours()
 		{
 			InitializeComponent();
 			ObjectFinder = new ObjectFinder();
+			Camera1 = new Camera(1); 
 		}
 
 		/// <summary>
@@ -27,10 +26,6 @@ namespace FindContours
 		/// <param name="e"></param>
 		private void btnCapture_Click(object sender, EventArgs e)
 		{
-			if (capture == null)
-			{
-				capture = new Emgu.CV.Capture(1); // cam num
-			}
 			CameraStreamCapture.Enabled = true;
 		}
 
@@ -42,11 +37,6 @@ namespace FindContours
 		private void btnStopCapture_Click(object sender, EventArgs e)
 		{
 			CameraStreamCapture.Enabled = false;
-			if (capture != null)
-			{
-				capture.Dispose();
-				capture = null;
-			}
 		}
 
 		/// <summary>
@@ -56,17 +46,12 @@ namespace FindContours
 		/// <param name="e"></param>
 		private void CameraStreamCapture_Tick(object sender, EventArgs e)
 		{
-			var qf = capture.QueryFrame();
-			if (qf == null)
-			{
-				return;
-			}
-			var bm = qf.ToBitmap();
+
+			var image = Camera1.GetBitmap();
 			
 			var colourFrom = new Hsv(trackBar1.Value, trackBar2.Value, trackBar3.Value);
 			var colourTo = new Hsv(trackBar4.Value, trackBar5.Value, trackBar6.Value);
-			
-			var image = bm;
+
 			var myEye = new Image<Bgr, byte>(image);
 			var roboEye = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
 
@@ -75,8 +60,6 @@ namespace FindContours
 			{
 				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
 			}
-
-
 
 			pictBoxColor.Image = myEye.Bitmap;
 			pictBoxGray.Image = roboEye.Bitmap;
@@ -90,7 +73,6 @@ namespace FindContours
 		private void frmContours_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			CameraStreamCapture.Enabled = false;
-			capture = null;
 		}
 
 		private void trackBar6_Scroll(object sender, EventArgs e)
