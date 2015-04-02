@@ -62,24 +62,21 @@ namespace FindContours
 				return;
 			}
 			var bm = qf.ToBitmap();
-			var image = bm;
-			var myEye = new Image<Bgr, byte>(image);
-			//image = new Bitmap("C:\\Users\\Roman\\Desktop\\Untitled3.png");
-			//image = new Bitmap("C:\\Emgu\\emgucv-windows-universal-cuda 2.4.10.1940\\bin\\pedestrian.png");
-			//image = new Bitmap("C:\\Emgu\\emgucv-windows-universal-cuda 2.4.10.1940\\bin\\stop-sign.jpg");
-			//processor.IdentifyContours(image, trackBar1.Value, trackBar2.Value, trackBar3.Value, trackBar4.Value, trackBar5.Value, trackBar6.Value, chkBoxInvert.Checked, out gray, out color);
+			
 			var colourFrom = new Hsv(trackBar1.Value, trackBar2.Value, trackBar3.Value);
 			var colourTo = new Hsv(trackBar4.Value, trackBar5.Value, trackBar6.Value);
+			
+			var image = bm;
+			var myEye = new Image<Bgr, byte>(image);
+			var roboEye = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
 
 			var contours = ObjectFinder.FindAllContours(image, colourFrom, colourTo, chkBoxInvert.Checked);
-			using (MemStorage storage = new MemStorage())
+			foreach (var contour in contours)
 			{
-				foreach (var contour in contours.Where(contour => contour.Area >= 20))
-				{
-					myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
-				}
+				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
 			}
-			var roboEye = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
+
+
 
 			pictBoxColor.Image = myEye.Bitmap;
 			pictBoxGray.Image = roboEye.Bitmap;
