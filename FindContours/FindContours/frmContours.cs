@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 /**
@@ -31,24 +25,7 @@ namespace FindContours
         public FrmContours()
         {
             InitializeComponent();
-            lblThresholdValue1.Text = trackbarThreshold1.Value.ToString();
-            lblThresholdValue2.Text = trackbarThreshold2.Value.ToString();
         }
-
-        /// <summary>
-        /// Updates the threshold label when the tracker changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void trackbarThreshold_Scroll1(object sender, EventArgs e)
-        {
-            lblThresholdValue1.Text = trackbarThreshold1.Value.ToString();
-        }
-
-		private void trackbarThreshold_Scroll2(object sender, EventArgs e)
-		{
-			lblThresholdValue2.Text = trackbarThreshold1.Value.ToString();
-		}
 
         /// <summary>
         /// Starts the camera capture.
@@ -59,7 +36,7 @@ namespace FindContours
         {
 			if (capture == null)
             {
-				capture = new Emgu.CV.Capture();
+				capture = new Emgu.CV.Capture(1);// cam num
             }
             CameraStreamCapture.Enabled = true;
 
@@ -99,7 +76,7 @@ namespace FindContours
 			//image = new Bitmap("C:\\Users\\Roman\\Desktop\\Untitled3.png");
 			//image = new Bitmap("C:\\Emgu\\emgucv-windows-universal-cuda 2.4.10.1940\\bin\\pedestrian.png");
 			//image = new Bitmap("C:\\Emgu\\emgucv-windows-universal-cuda 2.4.10.1940\\bin\\stop-sign.jpg");
-            processor.IdentifyContours(image, trackbarThreshold1.Value, trackbarThreshold2.Value, chkBoxInvert.Checked, out gray, out color);
+            processor.IdentifyContours(image, trackBar1.Value, trackBar2.Value, trackBar3.Value, trackBar4.Value, trackBar5.Value, trackBar6.Value, chkBoxInvert.Checked, out gray, out color);
             pictBoxColor.Image = color;
             pictBoxGray.Image = gray;
         }
@@ -114,5 +91,35 @@ namespace FindContours
             CameraStreamCapture.Enabled = false;
 			capture = null;
         }
+
+		private void trackBar6_Scroll(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trackBar2_Scroll(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trackBar1_Scroll(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trackBar3_Scroll(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trackBar4_Scroll(object sender, EventArgs e)
+		{
+
+		}
+
+		private void trackBar5_Scroll(object sender, EventArgs e)
+		{
+
+		}
     }
 }

@@ -12,13 +12,13 @@ namespace FindContours
 {
     class FindContours
     {
-        public void IdentifyContours(Bitmap actualImage,int thresholdValue1, int thresholdValue2, bool invert,out Bitmap processedGray,out Bitmap processedColor)
+		public void IdentifyContours(Bitmap actualImage, int hFrom, int sFrom, int rFrom, int hTo, int sTo, int rTo, bool invert, out Bitmap processedGray, out Bitmap processedColor)
         {
 
             //1. Convert the image to grayscale.
             
             #region Conversion To grayscale
-			var actim = new Image<Hsv, byte>(actualImage).InRange(new Hsv(44, 40, 50), new Hsv(85, 240, 210));
+			var actim = new Image<Hsv, byte>(actualImage).InRange(new Hsv(hFrom, sFrom, rFrom), new Hsv(hTo, sTo, rTo));
 	        //processedColor = actim.Bitmap;
             var grayImage = (actim);
             var colorImage = new Image<Bgr, byte>(actualImage);
@@ -31,7 +31,8 @@ namespace FindContours
             
             #region  Image normalization and inversion (if required)
 
-			grayImage = grayImage.ThresholdBinaryInv(new Gray(thresholdValue1),new Gray(thresholdValue2));
+			//todo
+			grayImage = grayImage.ThresholdBinaryInv(new Gray(12),new Gray(255));
           
             if (invert)
             {
