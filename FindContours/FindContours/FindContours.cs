@@ -18,7 +18,7 @@ namespace FindContours
             //1. Convert the image to grayscale.
             
             #region Conversion To grayscale
-			var actim = new Image<Bgr, byte>(actualImage).InRange(new Bgr(0, 0, 105), new Bgr(100, 100, 256));
+			var actim = new Image<Hsv, byte>(actualImage).InRange(new Hsv(44, 40, 50), new Hsv(85, 240, 210));
 	        //processedColor = actim.Bitmap;
             var grayImage = (actim);
             var colorImage = new Image<Bgr, byte>(actualImage);
