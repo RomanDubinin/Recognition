@@ -55,10 +55,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Angle.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="RotateStand.cs" />
+    <Compile Include="Sensor.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="ContourHelper.cs" />
     <Compile Include="IImageProvider.cs" />
-    <Compile Include="ObjectFinder.cs" />
+    <Compile Include="IRotateStand.cs" />
+    <Compile Include="ColourRecognizer.cs" />
+    <Compile Include="AngleLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

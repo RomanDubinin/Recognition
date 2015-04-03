@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Emgu.CV;
 using Emgu.CV.Structure;
@@ -9,14 +11,27 @@ namespace FindContours
 {
 	public partial class FrmContours : Form
 	{
-		private ObjectFinder ObjectFinder;
+		private readonly ColourRecognizer ColourRecognizer;
 		private readonly Camera Camera1;
 
 		public FrmContours()
 		{
 			InitializeComponent();
-			ObjectFinder = new ObjectFinder();
+			ColourRecognizer = new ColourRecognizer(new Hsv(0,0,0), new Hsv(0,0,0), false);
 			Camera1 = new Camera(1); 
+
+			var sensor = new Sensor(Camera1, ColourRecognizer,-15, 15);
+			var angleLocator = new AngleLocator(sensor, new RotateStand());
+			angleLocator.GotValue += PrintData;
+		}
+
+		private void PrintData(List<Angle> angles)
+		{
+			Console.Clear();
+			foreach (var angle in angles)
+			{
+				Console.WriteLine(angle);
+			}
 		}
 
 		/// <summary>
@@ -55,8 +70,12 @@ namespace FindContours
 			var myEye = new Image<Bgr, byte>(image);
 			var roboEye = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
 
-			var contours = ObjectFinder.FindAllContours(image, colourFrom, colourTo, chkBoxInvert.Checked);
-			foreach (var contour in contours)
+			ColourRecognizer.Invert = chkBoxInvert.Checked;
+			ColourRecognizer.ColourFrom = colourFrom;
+			ColourRecognizer.ColourTo = colourTo;
+
+			var contours = ColourRecognizer.FindAllContours(image);
+			foreach (var contour in contours.Where(c => c.Area >20))
 			{
 				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
 			}

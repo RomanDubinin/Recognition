@@ -7,13 +7,24 @@ using Emgu.CV.Structure;
 
 namespace ObjectFinderCore
 {
-	public class ObjectFinder
+	public class ColourRecognizer
 	{
-		public List<Contour<Point>> FindAllContours(Bitmap image, Hsv colourFrom, Hsv colourTo, bool invert)
-		{
-			var cuttedColoursImage = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
+		public Hsv ColourFrom { get; set; }
+		public Hsv ColourTo { get; set; }
+		public bool Invert { get; set; }
 
-			if (invert)
+		public ColourRecognizer(Hsv colourFrom, Hsv colourTo, bool invert)
+		{
+			ColourFrom = colourFrom;
+			ColourTo = colourTo;
+			Invert = invert;
+		}
+
+		public List<Contour<Point>> FindAllContours(Bitmap image)
+		{
+			var cuttedColoursImage = new Image<Hsv, byte>(image).InRange(ColourFrom, ColourTo);
+
+			if (Invert)
 				cuttedColoursImage._Not();
 
 			var resultContours = new List<Contour<Point>>();
@@ -31,10 +42,9 @@ namespace ObjectFinderCore
 			return resultContours;
 		}
 
-		public List<Contour<Point>> FindContoursInRightSize(Bitmap image, Hsv colourFrom, Hsv colourTo, bool invert,
-			double areaFrom, double areaTo)
+		public List<Contour<Point>> FindContoursInRightSize(Bitmap image, double areaFrom, double areaTo)
 		{
-			var allContours = FindAllContours(image, colourFrom, colourTo, invert);
+			var allContours = FindAllContours(image);
 			return allContours.Where(contour => contour.Area >= areaFrom && contour.Area <= areaTo).ToList();
 		}
 	}
