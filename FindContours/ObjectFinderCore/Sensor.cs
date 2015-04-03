@@ -63,6 +63,6 @@ namespace ObjectFinderCore
 			return true;
 		}
 
-		public event Action<List<Angle>> GotValue;
+		public event Action<List<Angle>> GotValue = delegate {};
 	}
 }

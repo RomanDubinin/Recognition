@@ -45,6 +45,6 @@ namespace ObjectFinderCore
 			}
 		}
 
-		public event Action<List<Angle>> GotValue;
+		public event Action<List<Angle>> GotValue = delegate {};
 	}
 }
