@@ -22,7 +22,19 @@ namespace ObjectFinderCore
 
 		private void OnGotValue(List<Angle> angles)
 		{
-			GotValue(angles.Select(angle => angle + Stand.CurrentAngle).ToList());
+			GotValue(angles.Select(angle => angle + Stand.CurrentAngle - Constants.MinAngle).ToList());
+
+//			if (Math.Abs((Stand.CurrentAngle - Constants.MinAngle - Angle.FromDegrees(45)).TotalDegrees) < 2)
+//			{
+//				Console.Clear();
+//				Console.WriteLine(123);
+//				foreach (var angle in angles)
+//				{
+//					
+//					Console.WriteLine(angle);
+//				}
+//			}
+
 		}
 
 		private void StandRotation()

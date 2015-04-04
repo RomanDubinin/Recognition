@@ -7,7 +7,7 @@ namespace ObjectFinderCore
 	public static class ContourHelper
 	{
 		public static double HorizontEpsilon = 100;
-		public static double MinimalArea = 30;
+		public static double MinimalArea = 80;
 
 		public static bool IsOnHorizont(Contour<Point> contour, int maxY)
 		{

@@ -18,20 +18,20 @@ namespace FindContours
 		{
 			InitializeComponent();
 			ColourRecognizer = new ColourRecognizer(new Hsv(0,0,0), new Hsv(0,0,0), false);
-			Camera1 = new Camera(0); 
+			Camera1 = new Camera(1); 
 
-			var sensor = new Sensor(Camera1, ColourRecognizer,-15, 15);
+			var sensor = new Sensor(Camera1, ColourRecognizer,-16, 16);
 			var angleLocator = new AngleLocator(sensor, new RotateStand(12));
 			angleLocator.GotValue += PrintData;
 		}
 
 		private void PrintData(List<Angle> angles)
 		{
-//			Console.Clear();
-//			foreach (var angle in angles)
-//			{
-//				Console.WriteLine(angle);
-//			}
+			Console.Clear();
+			foreach (var angle in angles)
+			{
+				Console.WriteLine(angle);
+			}
 		}
 
 		/// <summary>
@@ -63,9 +63,9 @@ namespace FindContours
 		{
 
 			var image = Camera1.GetBitmap();
-			
-			var colourFrom = new Hsv(trackBar1.Value, trackBar2.Value, trackBar3.Value);
-			var colourTo = new Hsv(trackBar4.Value, trackBar5.Value, trackBar6.Value);
+
+			var colourFrom = new Hsv(49, 79, 42);//new Hsv(trackBar1.Value, trackBar2.Value, trackBar3.Value);
+			var colourTo = new Hsv(108, 231, 194);//new Hsv(trackBar4.Value, trackBar5.Value, trackBar6.Value);
 
 			var myEye = new Image<Bgr, byte>(image);
 			var roboEye = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
@@ -74,14 +74,14 @@ namespace FindContours
 			ColourRecognizer.ColourFrom = colourFrom;
 			ColourRecognizer.ColourTo = colourTo;
 
-			var contours = ColourRecognizer.FindAllContours(image);
-			foreach (var contour in contours.Where(c => c.Area >20))
-			{
-				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
-			}
+//			var contours = ColourRecognizer.FindAllContours(image);
+//			foreach (var contour in contours.Where(c => c.Area >20))
+//			{
+//				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
+//			}
 
-			pictBoxColor.Image = myEye.Bitmap;
-			pictBoxGray.Image = roboEye.Bitmap;
+			pictBoxColor.Image = myEye.PyrDown().Bitmap;
+			pictBoxGray.Image = roboEye.PyrDown().Bitmap;
 		}
 
 		/// <summary>

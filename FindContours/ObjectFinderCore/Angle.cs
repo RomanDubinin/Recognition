@@ -41,6 +41,11 @@ namespace ObjectFinderCore
 			return new Angle { Value = a.Value + b.Value };
 		}
 
+		public static Angle operator -(Angle a, Angle b)
+		{
+			return new Angle { Value = a.Value - b.Value };
+		}
+
 		private static double GetValue180FromRadian(double radian)
 		{
 			return GetValue180FromDegrees(radian*180/Math.PI);

@@ -32,13 +32,18 @@ namespace ObjectFinderCore
 				var photo = ImageProvider.GetBitmap();
 				if (photo == null)
 					continue;
-				var contours = Recognizer.FindAllContours(photo);
-				var angles = contours
-					.Where(c => Selector(c, photo))
-					.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)));
-
+				List<Angle> angles;
+				using (var memStorage = new MemStorage())
+				{
+					var contours = Recognizer.FindAllContours(photo, memStorage);
+					angles = contours
+						.Where(c => Selector(c, photo))
+						.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)))
+						.ToList();
+				}
 				
-				GotValue(angles.ToList());
+
+				GotValue(angles);
 			}
 		}
 

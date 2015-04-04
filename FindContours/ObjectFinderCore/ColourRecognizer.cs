@@ -20,7 +20,7 @@ namespace ObjectFinderCore
 			Invert = invert;
 		}
 
-		public List<Contour<Point>> FindAllContours(Bitmap image)
+		public List<Contour<Point>> FindAllContours(Bitmap image, MemStorage memStorage)
 		{
 			var cuttedColoursImage = new Image<Hsv, byte>(image).InRange(ColourFrom, ColourTo);
 
@@ -30,11 +30,11 @@ namespace ObjectFinderCore
 			var resultContours = new List<Contour<Point>>();
 
 			for (
-				var contours = cuttedColoursImage.FindContours(CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_TC89_L1, RETR_TYPE.CV_RETR_EXTERNAL);
+				var contours = cuttedColoursImage.FindContours(CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_TC89_L1, RETR_TYPE.CV_RETR_EXTERNAL, memStorage);
 				contours != null;
 				contours = contours.HNext)
 			{
-				var currentContour = contours.ApproxPoly(contours.Perimeter*0.015);
+				var currentContour = contours.ApproxPoly(contours.Perimeter*0.015, memStorage);
 				resultContours.Add(currentContour);
 			}
 
@@ -42,9 +42,9 @@ namespace ObjectFinderCore
 			return resultContours;
 		}
 
-		public List<Contour<Point>> FindContoursInRightSize(Bitmap image, double areaFrom, double areaTo)
+		public List<Contour<Point>> FindContoursInRightSize(Bitmap image, double areaFrom, double areaTo, MemStorage memStorage)
 		{
-			var allContours = FindAllContours(image);
+			var allContours = FindAllContours(image, memStorage);
 			return allContours.Where(contour => contour.Area >= areaFrom && contour.Area <= areaTo).ToList();
 		}
 	}

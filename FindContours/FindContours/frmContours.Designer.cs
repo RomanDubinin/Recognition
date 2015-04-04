@@ -171,7 +171,7 @@ namespace FindContours
 			this.grpColor.Controls.Add(this.pictBoxColor);
 			this.grpColor.Location = new System.Drawing.Point(13, 180);
 			this.grpColor.Name = "grpColor";
-			this.grpColor.Size = new System.Drawing.Size(533, 454);
+			this.grpColor.Size = new System.Drawing.Size(399, 316);
 			this.grpColor.TabIndex = 2;
 			this.grpColor.TabStop = false;
 			this.grpColor.Text = "Color Image";
@@ -180,16 +180,16 @@ namespace FindContours
 			// 
 			this.pictBoxColor.Location = new System.Drawing.Point(6, 39);
 			this.pictBoxColor.Name = "pictBoxColor";
-			this.pictBoxColor.Size = new System.Drawing.Size(521, 409);
+			this.pictBoxColor.Size = new System.Drawing.Size(370, 263);
 			this.pictBoxColor.TabIndex = 0;
 			this.pictBoxColor.TabStop = false;
 			// 
 			// grpGray
 			// 
 			this.grpGray.Controls.Add(this.pictBoxGray);
-			this.grpGray.Location = new System.Drawing.Point(562, 180);
+			this.grpGray.Location = new System.Drawing.Point(544, 180);
 			this.grpGray.Name = "grpGray";
-			this.grpGray.Size = new System.Drawing.Size(530, 454);
+			this.grpGray.Size = new System.Drawing.Size(399, 316);
 			this.grpGray.TabIndex = 2;
 			this.grpGray.TabStop = false;
 			this.grpGray.Text = "Monochrome";
@@ -198,7 +198,7 @@ namespace FindContours
 			// 
 			this.pictBoxGray.Location = new System.Drawing.Point(6, 39);
 			this.pictBoxGray.Name = "pictBoxGray";
-			this.pictBoxGray.Size = new System.Drawing.Size(518, 409);
+			this.pictBoxGray.Size = new System.Drawing.Size(370, 263);
 			this.pictBoxGray.TabIndex = 0;
 			this.pictBoxGray.TabStop = false;
 			// 
@@ -210,7 +210,7 @@ namespace FindContours
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1127, 661);
+			this.ClientSize = new System.Drawing.Size(951, 505);
 			this.Controls.Add(this.chkBoxInvert);
 			this.Controls.Add(this.grpGray);
 			this.Controls.Add(this.grpColor);

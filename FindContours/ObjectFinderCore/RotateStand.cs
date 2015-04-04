@@ -14,7 +14,9 @@ namespace ObjectFinderCore
 			Console.WriteLine("open");
 		}
 
-		public Angle CurrentAngle { get; set; }
+		private volatile Angle a;
+
+		public Angle CurrentAngle { get { return a; } set { a = value; } }
 		public void Rotate(Angle newAngle)
 		{
 			Serial.WriteLine(string.Format("rotate{0}", ((int)(newAngle.TotalDegrees)).ToString("D3")));
