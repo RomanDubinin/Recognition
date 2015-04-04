@@ -9,7 +9,7 @@ namespace ObjectFinderCore
 		public RotateStand(int serialNum)
 		{
 			Console.WriteLine("serial");
-			Serial = new SerialPort(string.Format("COM{0}", serialNum));
+			Serial = new SerialPort(string.Format("COM{0}", serialNum), 115200);
 			Serial.Open();
 			Console.WriteLine("open");
 		}

@@ -29,7 +29,7 @@ namespace ObjectFinderCore
 		{
 			
 			var step = Angle.FromDegrees(1);
-			var currentAngle = Angle.FromDegrees(1);
+			var currentAngle = Constants.MinAngle + Angle.FromDegrees(1);
 			Stand.Rotate(currentAngle);
 
 			while (true)

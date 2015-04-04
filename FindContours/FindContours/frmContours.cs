@@ -27,11 +27,11 @@ namespace FindContours
 
 		private void PrintData(List<Angle> angles)
 		{
-			Console.Clear();
-			foreach (var angle in angles)
-			{
-				Console.WriteLine(angle);
-			}
+//			Console.Clear();
+//			foreach (var angle in angles)
+//			{
+//				Console.WriteLine(angle);
+//			}
 		}
 
 		/// <summary>
