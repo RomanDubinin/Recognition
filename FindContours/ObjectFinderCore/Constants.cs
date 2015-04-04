@@ -7,6 +7,6 @@ namespace ObjectFinderCore
 		public static Angle MinAngle = Angle.FromDegrees(0);
 		public static Angle MaxAngle = Angle.FromDegrees(180);
 
-		public static TimeSpan timeToDegree = TimeSpan.FromMilliseconds(10);
+		public static TimeSpan TimeToDegree = TimeSpan.FromMilliseconds(5);
 	}
 }

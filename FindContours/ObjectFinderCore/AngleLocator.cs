@@ -17,6 +17,7 @@ namespace ObjectFinderCore
 
 			sensor.GotValue += OnGotValue;
 			Task.Factory.StartNew(StandRotation);
+			
 		}
 
 		private void OnGotValue(List<Angle> angles)
@@ -26,6 +27,7 @@ namespace ObjectFinderCore
 
 		private void StandRotation()
 		{
+			
 			var step = Angle.FromDegrees(1);
 			var currentAngle = Angle.FromDegrees(1);
 			Stand.Rotate(currentAngle);
@@ -37,7 +39,8 @@ namespace ObjectFinderCore
 				{
 					currentAngle += step;
 					Stand.Rotate(currentAngle);
-					Thread.Sleep(Constants.timeToDegree);
+					Thread.Sleep(Constants.TimeToDegree);
+					
 				}
 
 				step = Angle.FromDegrees(-1*step.TotalDegrees);

@@ -18,10 +18,10 @@ namespace FindContours
 		{
 			InitializeComponent();
 			ColourRecognizer = new ColourRecognizer(new Hsv(0,0,0), new Hsv(0,0,0), false);
-			Camera1 = new Camera(1); 
+			Camera1 = new Camera(0); 
 
 			var sensor = new Sensor(Camera1, ColourRecognizer,-15, 15);
-			var angleLocator = new AngleLocator(sensor, new RotateStand());
+			var angleLocator = new AngleLocator(sensor, new RotateStand(12));
 			angleLocator.GotValue += PrintData;
 		}
 
