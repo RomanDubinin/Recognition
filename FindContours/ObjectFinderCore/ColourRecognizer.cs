@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
@@ -42,10 +41,26 @@ namespace ObjectFinderCore
 			return resultContours;
 		}
 
-		public List<Contour<Point>> FindContoursInRightSize(Bitmap image, double areaFrom, double areaTo, MemStorage memStorage)
+		public List<Contour<Point>> FindAllContours(Bitmap image)
 		{
-			var allContours = FindAllContours(image, memStorage);
-			return allContours.Where(contour => contour.Area >= areaFrom && contour.Area <= areaTo).ToList();
+			var cuttedColoursImage = new Image<Hsv, byte>(image).InRange(ColourFrom, ColourTo);
+
+			if (Invert)
+				cuttedColoursImage._Not();
+
+			var resultContours = new List<Contour<Point>>();
+
+			for (
+				var contours = cuttedColoursImage.FindContours(CHAIN_APPROX_METHOD.CV_CHAIN_APPROX_TC89_L1, RETR_TYPE.CV_RETR_EXTERNAL);
+				contours != null;
+				contours = contours.HNext)
+			{
+				var currentContour = contours.ApproxPoly(contours.Perimeter * 0.015);
+				resultContours.Add(currentContour);
+			}
+
+
+			return resultContours;
 		}
 	}
 }

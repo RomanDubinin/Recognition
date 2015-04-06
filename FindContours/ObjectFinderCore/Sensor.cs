@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Threading.Tasks;
 using Emgu.CV;
 
 namespace ObjectFinderCore
@@ -21,30 +20,31 @@ namespace ObjectFinderCore
 			Recognizer = recognizer;
 			MinValue = minValue;
 			MaxValue = maxValue;
-
-			Task.Factory.StartNew(StartReadData);
 		}
 
-		private void StartReadData()
+		public List<Angle> Read()
 		{
-			while (true)
-			{
-				var photo = ImageProvider.GetBitmap();
-				if (photo == null)
-					continue;
-				List<Angle> angles;
-				using (var memStorage = new MemStorage())
-				{
-					var contours = Recognizer.FindAllContours(photo, memStorage);
-					angles = contours
-						.Where(c => Selector(c, photo))
-						.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)))
-						.ToList();
-				}
-				
 
-				GotValue(angles);
+			var photo = ImageProvider.GetBitmap();
+			while (photo == null) //на некоторых машинах бывают проблемы
+			{
+				photo = ImageProvider.GetBitmap();
 			}
+
+			List<Angle> angles;
+			using (var memStorage = new MemStorage())
+			{
+				var contours = Recognizer.FindAllContours(photo, memStorage);
+				var selected = contours
+					.Where(c => Selector(c, photo)).ToList();
+				HasContours(selected);
+				Console.WriteLine(selected.Count);
+				angles = selected
+					.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)))
+					.ToList();
+			}
+
+			return angles;
 		}
 
 		private double ScaleValue(double value, double valuemin, double valuemax, double scalemin, double scalemax)
@@ -59,8 +59,8 @@ namespace ObjectFinderCore
 
 		private bool Selector(Contour<Point> contour, Bitmap image)
 		{
-			if (!ContourHelper.IsOnHorizont(contour, image.Height))
-				return false;
+//			if (!ContourHelper.IsOnHorizont(contour, image.Height))
+//				return false;
 
 			if (contour.Area < ContourHelper.MinimalArea)
 				return false;
@@ -68,6 +68,6 @@ namespace ObjectFinderCore
 			return true;
 		}
 
-		public event Action<List<Angle>> GotValue = delegate {};
+		public event Action<List<Contour<Point>>> HasContours = delegate { };
 	}
 }

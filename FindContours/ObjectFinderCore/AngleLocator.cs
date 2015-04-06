@@ -9,31 +9,31 @@ namespace ObjectFinderCore
 {
 	public class AngleLocator
 	{
+		private readonly Sensor MySensor;
 		private readonly IRotateStand Stand;
 
-		public AngleLocator(Sensor sensor, IRotateStand stand)
+		public AngleLocator(Sensor mySensor, IRotateStand stand)
 		{
+			MySensor = mySensor;
 			Stand = stand;
-
-			sensor.GotValue += OnGotValue;
 			Task.Factory.StartNew(StandRotation);
-			
+			Task.Factory.StartNew(StartReading);
+
 		}
 
-		private void OnGotValue(List<Angle> angles)
+		private void StartReading()
 		{
-			GotValue(angles.Select(angle => angle + Stand.CurrentAngle - Constants.MinAngle).ToList());
-
-//			if (Math.Abs((Stand.CurrentAngle - Constants.MinAngle - Angle.FromDegrees(45)).TotalDegrees) < 2)
-//			{
-//				Console.Clear();
-//				Console.WriteLine(123);
-//				foreach (var angle in angles)
+			while (true)
+			{
+				var degreesForLastData = Stand.CurrentAngle.TotalDegrees;
+				var dataFromSensor = MySensor.Read();
+				GotValue(dataFromSensor.Select(angle => Angle.FromDegrees(degreesForLastData) + angle - Constants.MinAngle).ToList());
+				//Console.Clear();
+//				foreach (var angle in dataFromSensor)
 //				{
-//					
 //					Console.WriteLine(angle);
 //				}
-//			}
+			}
 
 		}
 

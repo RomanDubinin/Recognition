@@ -20,18 +20,29 @@ namespace FindContours
 			ColourRecognizer = new ColourRecognizer(new Hsv(0,0,0), new Hsv(0,0,0), false);
 			Camera1 = new Camera(1); 
 
-			var sensor = new Sensor(Camera1, ColourRecognizer,-16, 16);
+			var sensor = new Sensor(Camera1, ColourRecognizer,-17, 17);
 			var angleLocator = new AngleLocator(sensor, new RotateStand(12));
 			angleLocator.GotValue += PrintData;
+			sensor.HasContours += ViewContours;
+		}
+
+		private void ViewContours(List<Contour<Point>> contours)
+		{
+			foreach (var contour in contours)
+			{
+				var myEye = new Image<Bgr, byte>(640, 640);
+				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), -1);
+				pictBoxColor.Image = myEye.PyrDown().Bitmap;
+			}
 		}
 
 		private void PrintData(List<Angle> angles)
 		{
-			Console.Clear();
-			foreach (var angle in angles)
-			{
-				Console.WriteLine(angle);
-			}
+//			Console.Clear();
+//			foreach (var angle in angles)
+//			{
+//				Console.WriteLine(angle);
+//			}
 		}
 
 		/// <summary>
@@ -64,8 +75,8 @@ namespace FindContours
 
 			var image = Camera1.GetBitmap();
 
-			var colourFrom = new Hsv(49, 79, 42);//new Hsv(trackBar1.Value, trackBar2.Value, trackBar3.Value);
-			var colourTo = new Hsv(108, 231, 194);//new Hsv(trackBar4.Value, trackBar5.Value, trackBar6.Value);
+			var colourFrom = Constants.PinkFrom;//new Hsv(trackBar1.Value, trackBar2.Value, trackBar3.Value);
+			var colourTo = Constants.PinkTo;//new Hsv(trackBar4.Value, trackBar5.Value, trackBar6.Value);
 
 			var myEye = new Image<Bgr, byte>(image);
 			var roboEye = new Image<Hsv, byte>(image).InRange(colourFrom, colourTo);
@@ -73,14 +84,9 @@ namespace FindContours
 			ColourRecognizer.Invert = chkBoxInvert.Checked;
 			ColourRecognizer.ColourFrom = colourFrom;
 			ColourRecognizer.ColourTo = colourTo;
+			
 
-//			var contours = ColourRecognizer.FindAllContours(image);
-//			foreach (var contour in contours.Where(c => c.Area >20))
-//			{
-//				myEye.Draw(contour.BoundingRectangle, new Bgr(Color.DeepPink), 2);
-//			}
-
-			pictBoxColor.Image = myEye.PyrDown().Bitmap;
+			
 			pictBoxGray.Image = roboEye.PyrDown().Bitmap;
 		}
 

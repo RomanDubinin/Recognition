@@ -46,6 +46,7 @@ namespace FindContours
 			this.grpGray = new System.Windows.Forms.GroupBox();
 			this.pictBoxGray = new System.Windows.Forms.PictureBox();
 			this.CameraStreamCapture = new System.Windows.Forms.Timer(this.components);
+	        CameraStreamCapture.Enabled = true;
 			this.grpControls.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar6)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.trackBar5)).BeginInit();
