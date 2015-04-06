@@ -8,7 +8,7 @@ namespace ObjectFinderCore
 		public static Angle MinAngle = Angle.FromDegrees(40);
 		public static Angle MaxAngle = Angle.FromDegrees(100);
 
-		public static TimeSpan TimeToDegree = TimeSpan.FromMilliseconds(30);
+		public static TimeSpan TimeToDegree = TimeSpan.FromMilliseconds(1000);
 
 		public static Hsv GreenFrom = new Hsv(49, 79, 42);
 		public static Hsv GreenTo = new Hsv(108, 231, 194);

@@ -38,7 +38,6 @@ namespace ObjectFinderCore
 				var selected = contours
 					.Where(c => Selector(c, photo)).ToList();
 				HasContours(selected);
-				Console.WriteLine(selected.Count);
 				angles = selected
 					.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)))
 					.ToList();
