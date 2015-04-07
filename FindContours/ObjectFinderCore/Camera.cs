@@ -1,25 +1,21 @@
 ﻿using System.Drawing;
 using Emgu.CV;
-using Emgu.CV.CvEnum;
 
 namespace ObjectFinderCore
 {
 	public class Camera : IImageProvider
 	{
-		private Capture сapture;
+		private readonly Capture Сapture;
 
 		public Camera(int camNum)
 		{
-			сapture = new Capture(camNum);
+			Сapture = new Capture(camNum);
 		}
 
 		public Bitmap GetBitmap()
 		{
-			var frame = сapture.QueryFrame();
-
-			if (frame == null)
-				return null;
-			return frame.Bitmap;
+			var frame = Сapture.QueryFrame();
+			return frame == null ? null : frame.Bitmap;
 		}
 	}
 }

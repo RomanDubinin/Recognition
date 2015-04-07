@@ -58,7 +58,7 @@
     <Compile Include="Angle.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="RotateStand.cs" />
-    <Compile Include="Sensor.cs" />
+    <Compile Include="ColorSensor.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="ContourHelper.cs" />
     <Compile Include="IImageProvider.cs" />

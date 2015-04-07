@@ -18,10 +18,10 @@ namespace FindContours
 		{
 			InitializeComponent();
 			ColourRecognizer = new ColourRecognizer(new Hsv(0,0,0), new Hsv(0,0,0), false);
-			Camera1 = new Camera(1); 
+			Camera1 = new Camera(0); 
 
-			var sensor = new Sensor(Camera1, ColourRecognizer,-17, 17);
-			var angleLocator = new AngleLocator(sensor, new RotateStand(12));
+			var sensor = new ColorSensor(Camera1, ColourRecognizer,-16, 16);
+			var angleLocator = new AngleLocator(sensor, new RotateStand(4), Angle.FromDegrees(20));
 			angleLocator.GotValue += PrintData;
 			sensor.HasContours += ViewContours;
 		}
@@ -38,11 +38,11 @@ namespace FindContours
 
 		private void PrintData(List<Angle> angles)
 		{
-//			Console.Clear();
-//			foreach (var angle in angles)
-//			{
-//				Console.WriteLine(angle);
-//			}
+			Console.Clear();
+			foreach (var angle in angles)
+			{
+				Console.WriteLine(angle);
+			}
 		}
 
 		/// <summary>

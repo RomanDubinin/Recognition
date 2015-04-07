@@ -7,14 +7,14 @@ using Emgu.CV;
 namespace ObjectFinderCore
 {
 	//todo: название
-	public class Sensor
+	public class ColorSensor
 	{
 		private readonly IImageProvider ImageProvider;
 		private readonly ColourRecognizer Recognizer;
 		private readonly double MaxValue;
 		private readonly double MinValue;
 
-		public Sensor(IImageProvider imageProvider, ColourRecognizer recognizer, double minValue, double maxValue)
+		public ColorSensor(IImageProvider imageProvider, ColourRecognizer recognizer, double minValue, double maxValue)
 		{
 			ImageProvider = imageProvider;
 			Recognizer = recognizer;
@@ -27,22 +27,17 @@ namespace ObjectFinderCore
 
 			var photo = ImageProvider.GetBitmap();
 			while (photo == null) //на некоторых машинах бывают проблемы
-			{
 				photo = ImageProvider.GetBitmap();
-			}
 
-			List<Angle> angles;
-			using (var memStorage = new MemStorage())
-			{
-				var contours = Recognizer.FindAllContours(photo, memStorage);
-				var selected = contours
-					.Where(c => Selector(c, photo)).ToList();
-				HasContours(selected);
-				angles = selected
-					.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)))
-					.ToList();
-			}
+			var contours = Recognizer.FindAllContours(photo);
+			var selectedContours = contours
+				.Where(c => Selector(c, photo)).ToList();
 
+			var angles = selectedContours
+				.Select(contour => Angle.FromDegrees(ScaleValue(contour.Center().X, 0, photo.Width, MinValue, MaxValue)))
+				.ToList();
+			
+			HasContours(selectedContours);
 			return angles;
 		}
 
@@ -67,6 +62,7 @@ namespace ObjectFinderCore
 			return true;
 		}
 
+		//штука нужна только для рисования
 		public event Action<List<Contour<Point>>> HasContours = delegate { };
 	}
 }

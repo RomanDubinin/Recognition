@@ -4,74 +4,44 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace ObjectFinderCore
 {
 	public class AngleLocator
 	{
-		private readonly Sensor MySensor;
+		private readonly ColorSensor MyColorSensor;
 		private readonly IRotateStand Stand;
+		private Angle RotationStep;
 
-		public AngleLocator(Sensor mySensor, IRotateStand stand)
+		public AngleLocator(ColorSensor myColorSensor, IRotateStand stand, Angle rotationStep)
 		{
-			MySensor = mySensor;
+			MyColorSensor = myColorSensor;
 			Stand = stand;
+			RotationStep = rotationStep;
 			Task.Factory.StartNew(StandRotation);
-//			Task.Factory.StartNew(StartReading);
-
-		}
-
-		private void StartReading()
-		{
-			while (true)
-			{
-				var degreesForLastData = Stand.CurrentAngle.TotalDegrees;
-				var dataFromSensor = MySensor.Read();
-				GotValue(dataFromSensor.Select(angle => Angle.FromDegrees(degreesForLastData) + angle - Constants.MinAngle).ToList());
-				Console.Clear();
-				foreach (var angle in dataFromSensor)
-				{
-					Console.WriteLine(angle + Angle.FromDegrees(degreesForLastData));
-				}
-			}
-
 		}
 
 		private void StandRotation()
 		{
-			
-			var step = Angle.FromDegrees(4);
-			var currentAngle = Constants.MinAngle + Angle.FromDegrees(1);
+			var currentAngle = Constants.MinAngle;
 			Stand.Rotate(currentAngle);
-			int i = 0;
-			while (i < 2)
+			while (true)
 			{
-				while (currentAngle.TotalDegrees > Constants.MinAngle.TotalDegrees && 
-					   currentAngle.TotalDegrees < Constants.MaxAngle.TotalDegrees)
+				while (currentAngle.TotalDegrees >= Constants.MinAngle.TotalDegrees &&
+				       currentAngle.TotalDegrees <= Constants.MaxAngle.TotalDegrees)
 				{
 					var degreesForLastData = Stand.CurrentAngle.TotalDegrees;
-					var dataFromSensor = MySensor.Read();
-					GotValue(dataFromSensor.Select(angle => Angle.FromDegrees(degreesForLastData) + angle - Constants.MinAngle).ToList());
-					//Console.Clear();
-					foreach (var angle in dataFromSensor)
-					{
-						Console.WriteLine(angle);
-						Console.WriteLine(Angle.FromDegrees(degreesForLastData));
-						Console.WriteLine(angle + Angle.FromDegrees(degreesForLastData));
-						Console.WriteLine("===========");
-					}
+					var dataFromSensor = MyColorSensor.Read();
 
-					currentAngle += step;
+					GotValue(dataFromSensor.Select(angle => Angle.FromDegrees(degreesForLastData) + angle - Constants.MinAngle).ToList());
+
+					currentAngle += RotationStep;
 					Stand.Rotate(currentAngle);
 					Thread.Sleep(Constants.TimeToDegree);
-					
 				}
-				Console.WriteLine("==========================");
-				step = Angle.FromDegrees(-1*step.TotalDegrees);
-				currentAngle += step;
+				RotationStep = Angle.FromDegrees(-1*RotationStep.TotalDegrees);
+				currentAngle += RotationStep + RotationStep;
 				Stand.Rotate(currentAngle);
 				Thread.Sleep(Constants.TimeToDegree);
-				i++;
 			}
 		}
 

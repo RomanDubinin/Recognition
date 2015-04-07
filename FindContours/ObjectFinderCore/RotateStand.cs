@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO.Ports;
+﻿using System.IO.Ports;
 
 namespace ObjectFinderCore
 {
@@ -8,10 +7,8 @@ namespace ObjectFinderCore
 		private readonly SerialPort Serial;
 		public RotateStand(int serialNum)
 		{
-			Console.WriteLine("serial");
 			Serial = new SerialPort(string.Format("COM{0}", serialNum), 115200);
 			Serial.Open();
-			Console.WriteLine("open");
 		}
 
 		private volatile Angle InternalCurrentAngle;
